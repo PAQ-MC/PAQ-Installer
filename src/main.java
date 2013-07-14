@@ -21,13 +21,29 @@ public class main {
 	
 	public static void Install() {
 		//install code goes here
+		//ToDo work on install code
+		//step 0 check that Install needs updating
+		//step one download forge
+		//step two install forge into minecraft launcher
+		//step three edit launcher_projiles.json and add PAQ at %appdata%/.PAQ
+		//step four download  config.zip and unzip
+		//step five move config folder to %appdata%/.PAQ
+		//step six download permission given mods.zip and unzip
+		//move permission given mods folder to %appdata%/.PAQ
+		//launch users broser to download link for non permission given mod link for user to download to ether C:/PAQ-Temp or %desktop%/PAQ-Temp
+		//check to make sure mod was downloaded move on if yes if not repeat last step after asking user if link is not broken if yes provide link to report broken link and move to next step
+		//repeat last two steps till all non perm mods are downloaded
+		//move mods folder form PAQ-Temp to %appdata%/.PAQ
+		//msg box to state install done
 	}
 	
 	public static void Update() {
 		//Update code goes here
+		//webcheck to check that v.txt in %appdata%/.PAQ matches http://mage-tech.org/pack/PAQv.txt if not return "update needed"
 	}
 	
 	public static void exit() {
+		//work on code to clean up PAQ-Temp folder
 		System.exit(0);
 	}
 	
