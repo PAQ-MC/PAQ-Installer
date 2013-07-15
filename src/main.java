@@ -16,7 +16,7 @@ public class main {
 		StdDraw.picture(0.18, 0.25, "Install1.png", .3,.2 );
 		StdDraw.picture(0.49, 0.25, "update1.png", .3,.2 );
 		StdDraw.picture(0.8, 0.25, "exit1.png", .3,.2 );
-		StdDraw.text(0.27, 0.01, "(c) Copywrite 2013 Mage Tech All Rights reserved");
+		StdDraw.picture(0.5, 0.00, "copywrite1.png");
 		// StdDraw.
 	}
 	
