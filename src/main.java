@@ -12,10 +12,11 @@ public class main {
 		StdDraw.setCanvasSize(600, 300);
 		StdDraw.frame.setLocation(dim.width/2-StdDraw.frame.getSize().width/2, dim.height/2-StdDraw.frame.getSize().height/2 - 130);
 		
-		StdDraw.picture(0.5, 0.8, "PAQLogo.png");
+		StdDraw.picture(0.5, 0.7, "PAQLogo.png");
 		StdDraw.picture(0.18, 0.25, "Install1.png", .3,.2 );
 		StdDraw.picture(0.49, 0.25, "update1.png", .3,.2 );
 		StdDraw.picture(0.8, 0.25, "exit1.png", .3,.2 );
+		StdDraw.text(0.27, 0.01, "(c) Copywrite 2013 Mage Tech All Rights reserved");
 		// StdDraw.
 	}
 	
