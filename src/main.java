@@ -1,11 +1,35 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
+import javax.swing.JOptionPane;
+
+//to do's
+//1. create perm folder at .minecraft folder location 
+//2. create temp folder at start location
+//3. Code all install code
 
 public class main {
+    //web page read
+	public static BufferedReader read(String url) throws Exception{
 
+		return new BufferedReader(
+
+		new InputStreamReader(
+
+		new URL(url).openStream()));}
 	
+	//web page get
+	public static String webget(String URL1) throws Exception{
+		BufferedReader reader = read(URL1);
 
+		String line = reader.readLine();
+		
+		return line;
+	}
+	//GUI code
 	public static void Gui() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -40,6 +64,23 @@ public class main {
 	
 	public static void Update() {
 		//Update code goes here
+		String PAQV = null;
+		try {
+			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt");
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		JOptionPane.showMessageDialog(null, "PAQ V. " + PAQV );
+		String PAQLV = null;
+		try {
+			PAQLV = webget("http://mage-tech.org/PAQ/PAQLauncherV.txt");
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		JOptionPane.showMessageDialog(null, "PAQ Launcher V. " + PAQLV);
+		
 		//webcheck to check that v.txt in %appdata%/.PAQ matches http://mage-tech.org/pack/PAQv.txt if not return "update needed"
 	}
 	
