@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,9 @@ import javax.swing.JOptionPane;
 //3. Code all install code
 
 public class main {
+
+	static String PAQv;
+
 	// web page read
 	public static BufferedReader read(String url) throws Exception {
 
@@ -47,7 +51,7 @@ public class main {
 
 		StdDraw.picture(0.5, 0.7, "PAQLogo.png");
 		StdDraw.picture(0.18, 0.25, "Install1.png", .3, .2);
-		StdDraw.picture(0.49, 0.25, "update1.png", .3, .2);
+		StdDraw.picture(0.49, 0.25, "website1.png", .3, .2);
 		StdDraw.picture(0.8, 0.25, "exit1.png", .3, .2);
 		StdDraw.picture(0.5, 0.00, "copywrite1.png");
 		// StdDraw.
@@ -56,7 +60,65 @@ public class main {
 	public static void Install() {
 		// install code goes here
 		// ToDo work on install code
-		// step 0 check that Install needs updating
+		// PAQ V check Code
+
+		File srcFolder = new File(System.getenv("APPDATA") + "\\.minecraft");
+		File destFolder = new File(System.getenv("APPDATA") + "\\.paq");
+
+		if (!destFolder.exists()) {
+			if (!srcFolder.exists()) {
+				System.out.println(".minecraft Does not exist");
+			} else {
+				try {
+					copyFolder(srcFolder, destFolder);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		File v = new File(destFolder + "//v.txt");
+		if (v.exists()) {
+			try {
+				BufferedReader in = new BufferedReader(new FileReader(v));
+				while (in.ready()) {
+					PAQv = in.readLine();
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (PAQv != Update()) {
+				JOptionPane
+						.showMessageDialog(null,
+								"you are running the most upto date PAQ v. installer will now exit");
+				exit();
+			}
+		} else {
+			try {
+
+				String content = Update();
+
+				File file = new File(destFolder + "//v.txt");
+
+				// if file doesnt exists, then create it
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+
+				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(content);
+				bw.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		// step one download forge
 		// step two install forge into minecraft launcher
 		// step three edit launcher_projiles.json and add PAQ at %appdata%/.PAQ
@@ -74,24 +136,16 @@ public class main {
 		// msg box to state install done
 	}
 
-	public static void Update() {
+	public static String Update() {
 		// Update code goes here
 		String PAQV = null;
 		try {
 			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt");
 		} catch (Exception e) {
-
 			e.printStackTrace();
 		}
-		JOptionPane.showMessageDialog(null, "PAQ V. " + PAQV);
-		String PAQLV = null;
-		try {
-			PAQLV = webget("http://mage-tech.org/PAQ/PAQLauncherV.txt");
-		} catch (Exception e) {
 
-			e.printStackTrace();
-		}
-		JOptionPane.showMessageDialog(null, "PAQ Launcher V. " + PAQLV);
+		return PAQV;
 
 		// webcheck to check that v.txt in %appdata%/.PAQ matches
 		// http://mage-tech.org/pack/PAQv.txt if not return "update needed"
@@ -102,7 +156,7 @@ public class main {
 		try {
 			deletetempDir();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		System.exit(0);
@@ -116,7 +170,6 @@ public class main {
 
 	// Download code
 	public static void downloadZipFile(String Url, String Dowloadlocation) {
-		// String saveTo = "C:\\Eclipse code\\";
 		try {
 			URL url = new URL(Url);
 			URLConnection conn = url.openConnection();
@@ -213,6 +266,48 @@ public class main {
 		delete(file);
 	}
 
+	public static void copyFolder(File src, File dest) throws IOException {
+
+		if (src.isDirectory()) {
+
+			// if directory not exists, create it
+			if (!dest.exists()) {
+				dest.mkdir();
+				System.out.println("Directory copied from " + src + "  to "
+						+ dest);
+			}
+
+			// list all the directory contents
+			String files[] = src.list();
+
+			for (String file : files) {
+				// construct the src and dest file structure
+				File srcFile = new File(src, file);
+				File destFile = new File(dest, file);
+				// recursive copy
+				copyFolder(srcFile, destFile);
+			}
+
+		} else {
+			// if file, then copy it
+			// Use bytes stream to support all file types
+			InputStream in = new FileInputStream(src);
+			OutputStream out = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			// copy the file content in bytes
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+
+			in.close();
+			out.close();
+			System.out.println("File copied from " + src + " to " + dest);
+		}
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		createtempDir();
@@ -237,11 +332,20 @@ public class main {
 							doLoop = false;
 						}
 					}
-					// Update
+					// Website
 					if (x >= .49 - .3 && x <= .49 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
 							System.out.println("button2");
-							Update();
+
+							try {
+								java.awt.Desktop
+										.getDesktop()
+										.browse(java.net.URI
+												.create("http://pack.mage-tech.org"));
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							doLoop = false;
 						}
 					}
