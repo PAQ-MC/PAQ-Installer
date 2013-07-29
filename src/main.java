@@ -57,9 +57,9 @@ public class main {
 		// StdDraw.
 	}
 
-	public static void Install() {
+	public static void Install() throws IOException {
 		// install code goes here
-		// ToDo work on install code
+
 		// PAQ V check Code
 
 		File srcFolder = new File(System.getenv("APPDATA") + "\\.minecraft");
@@ -119,6 +119,40 @@ public class main {
 			}
 		}
 
+		download("http://mage-tech.org/PAQ/config.txt","PAQ-Temp/config.txt");
+		
+		BufferedReader br = new BufferedReader(new FileReader("PAQ-Temp/config.txt"));
+		String location, adfy,unzip, savelocation, unziplocation ;
+
+		while ((location = br.readLine()) != null) {
+				adfy = br.readLine();
+				unzip = br.readLine();
+				savelocation = br.readLine();
+				unziplocation = br.readLine();
+				
+				if (adfy.equals("true")){
+					boolean exists = false;
+					do {
+						java.awt.Desktop.getDesktop().browse(java.net.URI.create(location));
+						
+						
+
+					} while(exists != true);
+					
+					
+					
+					
+				} else {
+					download(location, savelocation);
+				}
+				
+				
+				
+				
+				
+		}
+		br.close();
+		
 		// step one download forge
 		// step two install forge into minecraft launcher
 		// step three edit launcher_projiles.json and add PAQ at %appdata%/.PAQ
@@ -169,7 +203,7 @@ public class main {
 	}
 
 	// Download code
-	public static void downloadZipFile(String Url, String Dowloadlocation) {
+	public static void download(String Url, String Dowloadlocation) {
 		try {
 			URL url = new URL(Url);
 			URLConnection conn = url.openConnection();
@@ -341,7 +375,7 @@ public class main {
 								java.awt.Desktop
 										.getDesktop()
 										.browse(java.net.URI
-												.create("http://pack.mage-tech.org"));
+										.create("http://pack.mage-tech.org"));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
