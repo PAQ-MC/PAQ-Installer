@@ -164,13 +164,15 @@ public class main {
 						exists = true;
 					}
 				} while (exists != true);
+				if (unzip.equals("true")) {
 
+				}
 				File copylocation = new File("/PAQ-Temp/Downloads/" + filename);
 				copylocation.renameTo(new File(savelocation));
 
 			} else {
 				download(location, savelocation);
-				
+
 			}
 
 		}
