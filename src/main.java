@@ -155,11 +155,7 @@ public class main {
 							java.awt.Desktop
 									.getDesktop()
 									.browse(java.net.URI
-											.create("http://pack.mage-tech.org"));// replace
-																					// with
-																					// broken
-																					// link
-																					// forum
+											.create("http://pack.mage-tech.org"));
 							exists = true;
 						} else {
 							exists = false;
@@ -169,8 +165,12 @@ public class main {
 					}
 				} while (exists != true);
 
+				File copylocation = new File("/PAQ-Temp/Downloads/" + filename);
+				copylocation.renameTo(new File(savelocation));
+
 			} else {
 				download(location, savelocation);
+				
 			}
 
 		}
