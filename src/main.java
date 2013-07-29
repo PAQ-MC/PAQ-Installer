@@ -119,40 +119,63 @@ public class main {
 			}
 		}
 
-		download("http://mage-tech.org/PAQ/config.txt","PAQ-Temp/config.txt");
-		
-		BufferedReader br = new BufferedReader(new FileReader("PAQ-Temp/config.txt"));
-		String location, adfy,unzip, savelocation, unziplocation ;
+		download("http://mage-tech.org/PAQ/config.txt", "PAQ-Temp/config.txt");
+
+		BufferedReader br = new BufferedReader(new FileReader(
+				"PAQ-Temp/config.txt"));
+		String location, adfy, unzip, savelocation, unziplocation, filename;
 
 		while ((location = br.readLine()) != null) {
-				adfy = br.readLine();
-				unzip = br.readLine();
-				savelocation = br.readLine();
-				unziplocation = br.readLine();
-				
-				if (adfy.equals("true")){
-					boolean exists = false;
-					do {
-						java.awt.Desktop.getDesktop().browse(java.net.URI.create(location));
-						
-						
+			adfy = br.readLine();
+			unzip = br.readLine();
+			savelocation = br.readLine();
+			unziplocation = br.readLine();
+			filename = br.readLine();
 
-					} while(exists != true);
-					
-					
-					
-					
-				} else {
-					download(location, savelocation);
-				}
-				
-				
-				
-				
-				
+			if (adfy.equals("true")) {
+				boolean exists = false;
+				do {
+					JOptionPane
+							.showMessageDialog(
+									null,
+									"due to the modauthor not giving us permision to add there mod to the mod pack main download you will need to download thu there site");
+					java.awt.Desktop.getDesktop().browse(
+							java.net.URI.create(location));
+					JOptionPane
+							.showMessageDialog(
+									null,
+									" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location");
+					File downloadeditem = new File("PAQ-temp/Downloads/"
+							+ filename);
+					if (downloadeditem.exists() != true) {
+						int reply = JOptionPane.showConfirmDialog(null,
+								"is the link broken?", null,
+								JOptionPane.YES_NO_OPTION);
+						if (reply == JOptionPane.YES_OPTION) {
+							java.awt.Desktop
+									.getDesktop()
+									.browse(java.net.URI
+											.create("http://pack.mage-tech.org"));// replace
+																					// with
+																					// broken
+																					// link
+																					// forum
+							exists = true;
+						} else {
+							exists = false;
+						}
+					} else {
+						exists = true;
+					}
+				} while (exists != true);
+
+			} else {
+				download(location, savelocation);
+			}
+
 		}
 		br.close();
-		
+
 		// step one download forge
 		// step two install forge into minecraft launcher
 		// step three edit launcher_projiles.json and add PAQ at %appdata%/.PAQ
@@ -362,7 +385,12 @@ public class main {
 					if (x >= .18 - .3 && x <= .18 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
 							System.out.println("button1");
-							Install();
+							try {
+								Install();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							doLoop = false;
 						}
 					}
@@ -375,7 +403,7 @@ public class main {
 								java.awt.Desktop
 										.getDesktop()
 										.browse(java.net.URI
-										.create("http://pack.mage-tech.org"));
+												.create("http://pack.mage-tech.org"));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
