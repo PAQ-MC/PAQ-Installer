@@ -1,26 +1,31 @@
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.io.*;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 //to do's
-//1. create perm folder at .minecraft folder location 
-//2. create temp folder at start location
-//3. Code all install code
+//work on .json edit code
+//work on move file code
 
 public class main {
 
 	static String PAQv;
+	static JTextArea textArea;
 
 	// web page read
 	public static BufferedReader read(String url) throws Exception {
@@ -57,8 +62,8 @@ public class main {
 		// StdDraw.
 	}
 
-	public static void Install() throws IOException {
-		// install code goes here
+	// install code goes here
+	public static void Install() throws Exception {
 
 		// PAQ V check Code
 
@@ -69,54 +74,45 @@ public class main {
 			if (!srcFolder.exists()) {
 				System.out.println(".minecraft Does not exist");
 			} else {
-				try {
-					copyFolder(srcFolder, destFolder);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				copyFolder(srcFolder, destFolder);
 			}
 
 		}
 
 		File v = new File(destFolder + "//v.txt");
 		if (v.exists()) {
-			try {
-				BufferedReader in = new BufferedReader(new FileReader(v));
-				while (in.ready()) {
-					PAQv = in.readLine();
-				}
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			BufferedReader in = new BufferedReader(new FileReader(v));
+			while (in.ready()) {
+				PAQv = in.readLine();
 			}
-			if (PAQv != Update()) {
+			in.close();
+			if (PAQv == Update()) {
 				JOptionPane
 						.showMessageDialog(null,
 								"you are running the most upto date PAQ v. installer will now exit");
 				exit();
-			}
-		} else {
-			try {
-
-				String content = Update();
-
+			} else {
 				File file = new File(destFolder + "//v.txt");
-
-				// if file doesnt exists, then create it
-				if (!file.exists()) {
-					file.createNewFile();
-				}
-
+				file.delete();
+				file.createNewFile();
 				FileWriter fw = new FileWriter(file.getAbsoluteFile());
 				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(content);
+				bw.write(Update());
 				bw.close();
-
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+		} else {
+
+			File file = new File(destFolder + "//v.txt");
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(Update());
+			bw.close();
 		}
 
 		download("http://mage-tech.org/PAQ/config.txt", "PAQ-Temp/config.txt");
@@ -165,14 +161,15 @@ public class main {
 					}
 				} while (exists != true);
 				if (unzip.equals("true")) {
-					unzip("/PAQ-Temp/Donwloads/"+ filename, unziplocation);
+					unzip("/PAQ-Temp/Donwloads/" + filename, unziplocation);
 				} else {
-					File copylocation = new File("/PAQ-Temp/Downloads/" + filename);
-				copylocation.renameTo(new File(savelocation));
-				}				
+					File copylocation = new File("/PAQ-Temp/Downloads/"
+							+ filename);
+					copylocation.renameTo(new File(savelocation));
+				}
 			} else {
 				download(location, savelocation);
-				if (unzip.equals("true")){
+				if (unzip.equals("true")) {
 					unzip(savelocation, unziplocation);
 				}
 
@@ -180,15 +177,37 @@ public class main {
 
 		}
 		br.close();
-		
-		
 
-		// step one download forge
-		// step two install forge into minecraft launcher
+		// download forge
+		BufferedReader reader = read("http://mage-tech.org/PAQ/forgeinfo.txt");
+
+		String url = reader.readLine();
+		String name = reader.readLine();
+
+		reader.close();
+
+		download(url, "PAQ-Temp/" + name);
+
+		// install forge
+		// ToDO talk to arkman about msg
+		JOptionPane
+				.showMessageDialog(
+						null,
+						"the installer will now launch the forge installer please install forge and do not close the installer");
+
+		Process p = Runtime.getRuntime().exec(("java -jar PAQ-Temp/" + name));
+		p.waitFor();
+		if (p.exitValue() != 0) {
+			JOptionPane.showMessageDialog(null,
+					"forge install failed PAQ installer will now exit");
+			exit();
+		}
+
 		// step three edit launcher_projiles.json and add PAQ at %appdata%/.PAQ
-		
+
 		// move mods folder form PAQ-Temp to %appdata%/.PAQ
-		// msg box to state install done
+		// move config folder form PAQ-Temp to %appdata%/.PAQ
+		JOptionPane.showMessageDialog(null, "install done have fun playing");
 	}
 
 	public static String Update() {
@@ -321,6 +340,7 @@ public class main {
 		delete(file);
 	}
 
+	// copy folder code
 	public static void copyFolder(File src, File dest) throws IOException {
 
 		if (src.isDirectory()) {
@@ -363,8 +383,58 @@ public class main {
 		}
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	// console gui
+	public static void consolegui() {
+		redirectSystemStreams();
+		JFrame frame = new JFrame("JTextArea Test");
+		frame.setLayout(new FlowLayout());
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		textArea = new JTextArea("redirecting console output ... ", 10, 50);
+		textArea.setPreferredSize(new Dimension(6, 3));
+		JScrollPane scrollPane = new JScrollPane(textArea,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		textArea.setLineWrap(true);
+		frame.add(scrollPane);
+		frame.pack();
+		frame.setVisible(true);
+		System.out.println("console output redirected");
+	}
+
+	// update console gui
+	private static void updateTextArea(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				textArea.append(text);
+			}
+		});
+	}
+
+	// redirect system.out
+	private static void redirectSystemStreams() {
+		OutputStream out = new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				updateTextArea(String.valueOf((char) b));
+			}
+
+			@Override
+			public void write(byte[] b, int off, int len) throws IOException {
+				updateTextArea(new String(b, off, len));
+			}
+
+			@Override
+			public void write(byte[] b) throws IOException {
+				write(b, 0, b.length);
+			}
+		};
+
+		System.setOut(new PrintStream(out, true));
+		System.setErr(new PrintStream(out, true));
+	}
+
+	public static void main(String[] args) throws IOException {
+		consolegui();
 		createtempDir();
 		Gui();
 
@@ -385,7 +455,7 @@ public class main {
 							System.out.println("button1");
 							try {
 								Install();
-							} catch (IOException e) {
+							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
@@ -401,7 +471,7 @@ public class main {
 								java.awt.Desktop
 										.getDesktop()
 										.browse(java.net.URI
-												.create("http://pack.mage-tech.org"));
+												.create("http://paq.mage-tech.org"));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
