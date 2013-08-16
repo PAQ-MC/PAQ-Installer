@@ -19,14 +19,20 @@ public class Install {
 		if (!destFolder.exists()) {
 			if (!srcFolder.exists()) {
 				System.out.println(".minecraft Does not exist");
+				JOptionPane.showMessageDialog(null, ".minecraft does not exits please run minecraft atleast once");
+				main.exit();
 			} else {
+				System.out.println("copying .minecraft this could take a bit");
 				FileControl.copyFolder(srcFolder, destFolder);
+				System.out.println("finshed coping .minecraft");
 			}
 
 		}
-
+		
+		System.out.println("checking if v.txt exits");
 		File v = new File(destFolder + "//v.txt");
 		if (v.exists()) {
+			System.out.println("v.txt does exits comparing to web PAQ v");
 			BufferedReader in = new BufferedReader(new FileReader(v));
 
 			while (in.ready()) {
@@ -34,11 +40,13 @@ public class Install {
 			}
 			in.close();
 			if (PAQv == main.Update()) {
+				System.out.println("web PAQ v and v.txt mach");
 				JOptionPane
 						.showMessageDialog(null,
 								"you are running the most upto date PAQ v. installer will now exit");
 				main.exit();
 			} else {
+				System.out.println("web PAQ v and v.txt do not mach updating v.txt");
 				File file = new File(destFolder + "//v.txt");
 				file.delete();
 				file.createNewFile();
@@ -48,7 +56,7 @@ public class Install {
 				bw.close();
 			}
 		} else {
-
+			System.out.println("v.txt does not exist makeing");
 			File file = new File(destFolder + "//v.txt");
 
 			// if file doesnt exists, then create it
@@ -61,10 +69,11 @@ public class Install {
 			bw.write(main.Update());
 			bw.close();
 		}
+		System.out.println("Downloading config");
 		//Change this txt to change Config download location
 		main.download("http://mage-tech.org/PAQ/config.txt",
 				"PAQ-Temp/config.txt");
-
+		System.out.println("config downloaded ... reading config");
 		BufferedReader br = new BufferedReader(new FileReader(
 				"PAQ-Temp/config.txt"));
 		String location, adfy, unzip, savelocation, unziplocation, filename;
@@ -151,18 +160,28 @@ public class Install {
 					"forge install failed PAQ installer will now exit");
 			main.exit();
 		}
-
-		//edit launcher_profiles.json
-		//add to the profiles group
-		//	"name": "PAQ" + v. number,
-		//	"gameDir": destfolder ,
-		//  "lastVersionId": lastVersionId,
-		//  "useHopperCrashService": false,
 		
+		JsonEditCode.Main(srcFolder.toString(), PAQv, destFolder.toString(), lastVersionId);
 
 		// move mods folder form PAQ-Temp to %appdata%/.PAQ
+		File modsfolder = new File(destFolder + "/mods");
+		if (modsfolder.exists()){
+		System.out.println("deleteing old mod folder");
+		FileControl.delete(modsfolder);
+		System.out.println("old mods folder deleted");
+		}
+		FileControl.copyFolder(new File("PAQ-Temp/mods"), modsfolder);
 		// move config folder form PAQ-Temp to %appdata%/.PAQ
+		File configfolder = new File(destFolder + "/config");
+		if (configfolder.exists()){
+		System.out.println("deleteing old config folder");
+		FileControl.delete(configfolder);
+		System.out.println("old config Folder deleted");
+		}
+		FileControl.copyFolder(new File("PAQ-Temp/config"), configfolder);
+		System.out.println("what are we going to do today?");
 		JOptionPane.showMessageDialog(null, "install done have fun playing");
+		System.out.println("we are going to take over the world block by block");
 	}
 
 }
