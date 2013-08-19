@@ -1,26 +1,7 @@
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
 import java.net.URL;
 import java.net.URLConnection;
 import java.io.*;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-
-//to do's
-//work on .json edit code
-//work on move file code
 
 public class main {
 
@@ -95,7 +76,7 @@ public class main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Gui.consolegui();
+		//Gui.consolegui();
 		FileControl.createtempDir();
 		Gui.main();
 		boolean programloop = true;

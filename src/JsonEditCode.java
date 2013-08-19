@@ -40,6 +40,7 @@ public class JsonEditCode {
             JsonNodeFactories.field("name", JsonNodeFactories.string("PAQ" + " " + PAQv)),
             JsonNodeFactories.field("gameDir", JsonNodeFactories.string(gameDir)),            
             JsonNodeFactories.field("lastVersionId", JsonNodeFactories.string(forgeid)),
+            JsonNodeFactories.field("javaArgs", JsonNodeFactories.string("-Xmx1G -XX:MaxPermSize\u003d1024m")),
             JsonNodeFactories.field("useHopperCrashservice",JsonNodeFactories.booleanNode(false)),
             
         };
