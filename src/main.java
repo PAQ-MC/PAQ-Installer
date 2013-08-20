@@ -1,3 +1,4 @@
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.io.*;
@@ -57,19 +58,57 @@ public class main {
 	// Download code
 	public static void download(String Url, String Dowloadlocation) {
 		try {
-			URL url = new URL(Url);
-			URLConnection conn = url.openConnection();
-			InputStream in = conn.getInputStream();
-			FileOutputStream out = new FileOutputStream(Dowloadlocation);
-			byte[] b = new byte[1024];
-			int count;
-			while ((count = in.read(b)) >= 0) {
-				out.write(b, 0, count);
+			
+			File outputfile = new File(Dowloadlocation);
+			outputfile.getParentFile().mkdirs();
+			outputfile.createNewFile();
+			
+			System.out.println("Downloading " + Url + " to " + outputfile);
+			
+			HttpURLConnection connect = (HttpURLConnection) (new URL(Url)).openConnection();
+			connect.setInstanceFollowRedirects(true);
+			
+			InputStream inStream = connect.getInputStream();
+			OutputStream outStream = new FileOutputStream(outputfile);
+			
+			int data = inStream.read();
+			System.out.print(data);
+			while (data != -1);
+			{
+				System.out.print(data);
+				outStream.write(data);
+				System.out.print(data);
+				data = inStream.read();
 			}
-			out.flush();
-			out.close();
-			in.close();
+			
+			inStream.close();
+			outStream.flush();
+			outStream.close();
+			
+			System.out.println("Download complete");
+		
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Download txt 
+	public static void downloadtxt(String Url, String Downloadlocation) {
+		try {
+		URL url = new URL(Url);
+		URLConnection conn = url.openConnection();
+		InputStream in = conn.getInputStream();
+		FileOutputStream out = new FileOutputStream(Downloadlocation);
+		byte[] b = new byte[1024];
+		int count;
+		while ((count = in.read(b)) >= 0) {
+			out.write(b, 0, count);
+		}
+		out.flush();
+		out.close();
+		in.close(); 
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

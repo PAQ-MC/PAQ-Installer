@@ -19,7 +19,9 @@ public class Install {
 		if (!destFolder.exists()) {
 			if (!srcFolder.exists()) {
 				System.out.println(".minecraft Does not exist");
-				JOptionPane.showMessageDialog(null, ".minecraft does not exits please run minecraft atleast once");
+				JOptionPane
+						.showMessageDialog(null,
+								".minecraft does not exits please run minecraft atleast once");
 				main.exit();
 			} else {
 				System.out.println("copying .minecraft this could take a bit");
@@ -28,9 +30,9 @@ public class Install {
 			}
 
 		}
-		
+
 		System.out.println("checking if v.txt exits");
-		File v = new File(destFolder + "//v.txt");
+		File v = new File(srcFolder + "/v.txt");
 		if (v.exists()) {
 			System.out.println("v.txt does exits comparing to web PAQ v");
 			BufferedReader in = new BufferedReader(new FileReader(v));
@@ -46,8 +48,9 @@ public class Install {
 								"you are running the most upto date PAQ v. installer will now exit");
 				main.exit();
 			} else {
-				System.out.println("web PAQ v and v.txt do not mach updating v.txt");
-				File file = new File(destFolder + "//v.txt");
+				System.out
+						.println("web PAQ v and v.txt do not mach updating v.txt");
+				File file = new File(srcFolder + "/v.txt");
 				file.delete();
 				file.createNewFile();
 				FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -57,7 +60,7 @@ public class Install {
 			}
 		} else {
 			System.out.println("v.txt does not exist makeing");
-			File file = new File(destFolder + "//v.txt");
+			File file = new File(srcFolder + "//v.txt");
 
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
@@ -70,8 +73,8 @@ public class Install {
 			bw.close();
 		}
 		System.out.println("Downloading config");
-		//Change this txt to change Config download location
-		main.download("http://mage-tech.org/PAQ/config.txt",
+		// Change this txt to change Config download location
+		main.downloadtxt("http://mage-tech.org/PAQ/config.txt",
 				"PAQ-Temp/config.txt");
 		System.out.println("config downloaded ... reading config");
 		BufferedReader br = new BufferedReader(new FileReader(
@@ -84,7 +87,8 @@ public class Install {
 			savelocation = br.readLine();
 			unziplocation = br.readLine();
 			filename = br.readLine();
-			System.out.println("checking if " + filename + " requres adfly download");
+			System.out.println("checking if " + filename
+					+ " requres adfly download");
 			if (adfy.equals("true")) {
 				System.out.println("it does");
 				boolean exists = false;
@@ -102,16 +106,18 @@ public class Install {
 							.showMessageDialog(
 									null,
 									" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location");
-					System.out.println("Checking if " + filename + " exits" );
+					System.out.println("Checking if " + filename + " exits");
 					File downloadeditem = new File("PAQ-temp/Downloads/"
 							+ filename);
 					if (downloadeditem.exists() != true) {
-						System.out.println("File missing asking if link is broken");
+						System.out
+								.println("File missing asking if link is broken");
 						int reply = JOptionPane.showConfirmDialog(null,
 								"is the link broken?", null,
 								JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION) {
-							System.out.println("link Broken sending user to broken link reporting forum");
+							System.out
+									.println("link Broken sending user to broken link reporting forum");
 							java.awt.Desktop
 									.getDesktop()
 									.browse(java.net.URI
@@ -132,7 +138,8 @@ public class Install {
 					main.unzip("/PAQ-Temp/Donwloads/" + filename, unziplocation);
 					System.out.println("file unziped");
 				} else {
-					System.out.println("file does not need unziping copying to requred location");
+					System.out
+							.println("file does not need unziping copying to requred location");
 					File copylocation = new File("/PAQ-Temp/Downloads/"
 							+ filename);
 					copylocation.renameTo(new File(savelocation));
@@ -183,28 +190,30 @@ public class Install {
 					"forge install failed PAQ installer will now exit");
 			main.exit();
 		}
-		
-		JsonEditCode.Main(srcFolder.toString(), PAQv, destFolder.toString(), lastVersionId);
+
+		JsonEditCode.Main(srcFolder.toString(), main.Update(),
+				destFolder.toString(), lastVersionId);
 
 		// move mods folder form PAQ-Temp to %appdata%/.PAQ
 		File modsfolder = new File(destFolder + "/mods");
-		if (modsfolder.exists()){
-		System.out.println("deleteing old mod folder");
-		FileControl.delete(modsfolder);
-		System.out.println("old mods folder deleted");
+		if (modsfolder.exists()) {
+			System.out.println("deleteing old mod folder");
+			FileControl.delete(modsfolder);
+			System.out.println("old mods folder deleted");
 		}
 		FileControl.copyFolder(new File("PAQ-Temp/mods"), modsfolder);
 		// move config folder form PAQ-Temp to %appdata%/.PAQ
 		File configfolder = new File(destFolder + "/config");
-		if (configfolder.exists()){
-		System.out.println("deleteing old config folder");
-		FileControl.delete(configfolder);
-		System.out.println("old config Folder deleted");
+		if (configfolder.exists()) {
+			System.out.println("deleteing old config folder");
+			FileControl.delete(configfolder);
+			System.out.println("old config Folder deleted");
 		}
 		FileControl.copyFolder(new File("PAQ-Temp/config"), configfolder);
 		System.out.println("what are we going to do today?");
 		JOptionPane.showMessageDialog(null, "install done have fun playing");
-		System.out.println("we are going to take over the world block by block");
+		System.out
+				.println("we are going to take over the world block by block");
 	}
 
 }
