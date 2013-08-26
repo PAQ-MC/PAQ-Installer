@@ -1,12 +1,23 @@
-import java.net.HttpURLConnection;
+/*
+This work is licensed under the Creative Commons
+Attribution-NonCommercial 3.0 Unported License. 
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
+ */
+
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.io.*;
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 
 public class main {
 
 	static String PAQv;
+
 	// web page read
 	public static BufferedReader read(String url) throws Exception {
 
@@ -16,6 +27,7 @@ public class main {
 
 		new URL(url).openStream()));
 	}
+
 	// web page get
 	public static String webget(String URL1) throws Exception {
 		BufferedReader reader = read(URL1);
@@ -24,22 +36,21 @@ public class main {
 
 		return line;
 	}
-	//Get v. Statuses 
+
+	// Get v. Statuses
 	public static String Update() {
 		// Update code goes here
 		String PAQV = null;
 		try {
-			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt");
+			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt"); ///change to your v.txt location on the web
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return PAQV;
-
-		// webcheck to check that v.txt in %appdata%/.PAQ matches
-		// http://mage-tech.org/pack/PAQv.txt if not return "update needed"
 	}
-	//exit code
+
+	// exit code
 	public static void exit() {
 		// work on code to clean up PAQ-Temp folder
 		try {
@@ -50,72 +61,66 @@ public class main {
 		}
 		System.exit(0);
 	}
+
 	// Unzip Code
 	public static void unzip(String Zipfile, String Directry) {
-		UnZip unZip = new UnZip();
-		unZip.unZipIt(Zipfile, Directry);
-	}
-	// Download code
-	public static void download(String Url, String Dowloadlocation) {
-		try {
-			
-			File outputfile = new File(Dowloadlocation);
-			outputfile.getParentFile().mkdirs();
-			outputfile.createNewFile();
-			
-			System.out.println("Downloading " + Url + " to " + outputfile);
-			
-			HttpURLConnection connect = (HttpURLConnection) (new URL(Url)).openConnection();
-			connect.setInstanceFollowRedirects(true);
-			
-			InputStream inStream = connect.getInputStream();
-			OutputStream outStream = new FileOutputStream(outputfile);
-			
-			int data = inStream.read();
-			System.out.print(data);
-			while (data != -1);
-			{
-				System.out.print(data);
-				outStream.write(data);
-				System.out.print(data);
-				data = inStream.read();
-			}
-			
-			inStream.close();
-			outStream.flush();
-			outStream.close();
-			
-			System.out.println("Download complete");
-		
 
+		try {
+
+			ZipFile zipFile = new ZipFile(Zipfile);
+			zipFile.extractAll(Directry);
+		} catch (ZipException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Download code
+	public static void download(String Url, String Downloadlocation) {
+		System.out.println("Downloading file from " + Url + " to "
+				+ Downloadlocation);
+		try {
+			URL website;
+			website = new URL(Url);
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos;
+			File outputfile = new File(Downloadlocation);
+			fos = new FileOutputStream(outputfile);
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			fos.close();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// Download txt 
+	// Download txt
 	public static void downloadtxt(String Url, String Downloadlocation) {
 		try {
-		URL url = new URL(Url);
-		URLConnection conn = url.openConnection();
-		InputStream in = conn.getInputStream();
-		FileOutputStream out = new FileOutputStream(Downloadlocation);
-		byte[] b = new byte[1024];
-		int count;
-		while ((count = in.read(b)) >= 0) {
-			out.write(b, 0, count);
-		}
-		out.flush();
-		out.close();
-		in.close(); 
-		
+			URL url = new URL(Url);
+			URLConnection conn = url.openConnection();
+			InputStream in = conn.getInputStream();
+			FileOutputStream out = new FileOutputStream(Downloadlocation);
+
+			byte[] b = new byte[1024];
+			int count;
+			while ((count = in.read(b)) >= 0) {
+				out.write(b, 0, count);
+			}
+			out.flush();
+			out.close();
+			in.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	//start code
 	public static void main(String[] args) throws IOException {
-		//Gui.consolegui();
+		// Gui.consolegui();
 		FileControl.createtempDir();
 		Gui.main();
 		boolean programloop = true;
@@ -137,7 +142,6 @@ public class main {
 							try {
 								Install.main();
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							doLoop = false;
@@ -147,14 +151,13 @@ public class main {
 					if (x >= .49 - .3 && x <= .49 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
 							System.out.println("Website Button Clicked");
-							System.out.println("Opening The PAQ Fourms");
+							System.out.println("Opening The PAQ Fourms"); ///change to your Website name
 							try {
 								java.awt.Desktop
 										.getDesktop()
 										.browse(java.net.URI
-												.create("http://paq.mage-tech.org"));
+												.create("http://paq.mage-tech.org")); ///change url to your website location 
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							doLoop = false;

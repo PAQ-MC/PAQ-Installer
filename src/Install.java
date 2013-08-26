@@ -1,3 +1,9 @@
+/*
+This work is licensed under the Creative Commons
+Attribution-NonCommercial 3.0 Unported License. 
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +20,7 @@ public class Install {
 		// PAQ V check Code
 
 		File srcFolder = new File(System.getenv("APPDATA") + "\\.minecraft");
-		File destFolder = new File(System.getenv("APPDATA") + "\\.paq");
+		File destFolder = new File(System.getenv("APPDATA") + "\\.paq"); ///change to Mod Pack Name
 
 		if (!destFolder.exists()) {
 			if (!srcFolder.exists()) {
@@ -34,22 +40,22 @@ public class Install {
 		System.out.println("checking if v.txt exits");
 		File v = new File(srcFolder + "/v.txt");
 		if (v.exists()) {
-			System.out.println("v.txt does exits comparing to web PAQ v");
+			System.out.println("v.txt does exits comparing to web PAQ v"); ///change PAQ to mod pack name
 			BufferedReader in = new BufferedReader(new FileReader(v));
 
 			while (in.ready()) {
 				PAQv = in.readLine();
 			}
 			in.close();
-			if (PAQv == main.Update()) {
-				System.out.println("web PAQ v and v.txt mach");
+			if (PAQv.equals(main.Update())) {
+				System.out.println("web PAQ v and v.txt mach");  /// Change PAQ to Mod pack name
 				JOptionPane
 						.showMessageDialog(null,
-								"you are running the most upto date PAQ v. installer will now exit");
+								"you are running the most upto date PAQ v. installer will now exit");  ///change PAQ to mod pack name
 				main.exit();
 			} else {
 				System.out
-						.println("web PAQ v and v.txt do not mach updating v.txt");
+						.println("web PAQ v and v.txt do not mach updating v.txt"); /// Change PAQ to Mod pack name
 				File file = new File(srcFolder + "/v.txt");
 				file.delete();
 				file.createNewFile();
@@ -74,11 +80,11 @@ public class Install {
 		}
 		System.out.println("Downloading config");
 		// Change this txt to change Config download location
-		main.downloadtxt("http://mage-tech.org/PAQ/config.txt",
-				"PAQ-Temp/config.txt");
+		main.downloadtxt("http://mage-tech.org/PAQ/config.txt", 
+				"PAQ-Temp/config.txt"); /// Change to Config web location 
 		System.out.println("config downloaded ... reading config");
 		BufferedReader br = new BufferedReader(new FileReader(
-				"PAQ-Temp/config.txt"));
+				"PAQ-Temp/config.txt")); /// Change To config Downloaded location
 		String location, adfy, unzip, savelocation, unziplocation, filename;
 
 		while ((location = br.readLine()) != null) {
@@ -105,10 +111,10 @@ public class Install {
 					JOptionPane
 							.showMessageDialog(
 									null,
-									" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location");
+									" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location"); /// Change to <Modpack Name>-temp/Downloads
 					System.out.println("Checking if " + filename + " exits");
 					File downloadeditem = new File("PAQ-temp/Downloads/"
-							+ filename);
+							+ filename); ///chang PAQ-Temp/Downloads to <Modpack name>-Temp/Downloads
 					if (downloadeditem.exists() != true) {
 						System.out
 								.println("File missing asking if link is broken");
@@ -121,7 +127,7 @@ public class Install {
 							java.awt.Desktop
 									.getDesktop()
 									.browse(java.net.URI
-											.create("http://pack.mage-tech.org"));
+											.create("http://pack.mage-tech.org")); ///change to broken link reporting forum web location
 							exists = true;
 						} else {
 							exists = false;
@@ -135,7 +141,7 @@ public class Install {
 				System.out.println("Checking if needs upziping");
 				if (unzip.equals("true")) {
 					System.out.println("does need unziping");
-					main.unzip("/PAQ-Temp/Donwloads/" + filename, unziplocation);
+					main.unzip("/PAQ-Temp/Donwloads/" + filename, unziplocation);  ///change PAQ-Temp/Downloads to <modpack name>-Temp/Downloads
 					System.out.println("file unziped");
 				} else {
 					System.out
@@ -215,5 +221,4 @@ public class Install {
 		System.out
 				.println("we are going to take over the world block by block");
 	}
-
 }
