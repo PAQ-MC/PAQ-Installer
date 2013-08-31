@@ -5,7 +5,7 @@ minecraft auto installer
 
 This installer downloads from the web all needed files and includes v. suport
 
-better descrition to come
+Requed files to come later
 
 This work is licensed under the Creative Commons 
 Attribution-NonCommercial 3.0 Unported License.
