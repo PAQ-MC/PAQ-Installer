@@ -18,9 +18,17 @@ public class Install {
 	public static void main() throws Exception {
 
 		// PAQ V check Code
-
-		File srcFolder = new File(System.getenv("APPDATA") + "\\.minecraft");
-		File destFolder = new File(System.getenv("APPDATA") + "\\.paq"); ///change to Mod Pack Name
+File srcFolder = null, destFolder = null;
+		if (main.GetMcFilepath()== null){
+			JOptionPane.showMessageDialog(null, "Your OS is currently not supported Exiting Installer and Opening fourms");
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create("http://paq.mage-tech.org"));
+			main.exit();
+		}else{
+		srcFolder	 = main.GetMcFilepath();
+		destFolder	 = main.GetPAQPath();
+		}
+		
+		
 
 		if (!destFolder.exists()) {
 			if (!srcFolder.exists()) {

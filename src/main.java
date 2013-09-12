@@ -42,7 +42,10 @@ public class main {
 		// Update code goes here
 		String PAQV = null;
 		try {
-			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt"); ///change to your v.txt location on the web
+			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt"); // /change to
+																// your v.txt
+																// location on
+																// the web
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,8 +120,51 @@ public class main {
 			e.printStackTrace();
 		}
 	}
+
+	public static File GetMcFilepath() {
+
+		String os = System.getProperty("os.name").toLowerCase();
+		boolean isWindows, isMac;
+
+		isWindows = (os.indexOf("win") >= 0);
+		isMac = (os.indexOf("mac") >= 0);
+
+		if (isWindows) {
+			File mclocation = new File(System.getenv("APPDATA")
+					+ "\\.minecraft");
+			return mclocation;
+		} else if (isMac) {
+			File mclocatoin = new File(System.getProperty("user.home")
+					+ "/Library/Application Support/minecraft");
+			return mclocatoin;
+		} else {
+			return null;
+		}
+
+	}
+
+	public static File GetPAQPath() {
+
+		String os = System.getProperty("os.name").toLowerCase();
+		boolean isWindows, isMac;
+
+		isWindows = (os.indexOf("win") >= 0);
+		isMac = (os.indexOf("mac") >= 0);
+
+		if (isWindows) {
+			File PAQlocation = new File(System.getenv("APPDATA")
+					+ "\\.PAQ");
+			return PAQlocation;
+		} else if (isMac) {
+			File mclocatoin = new File(System.getProperty("user.home")
+					+ "/Library/Application Support/PAQ");
+			return mclocatoin;
+		} else {
+			return null;
+		}
+		}
 	
-	//start code
+	// start code
 	public static void main(String[] args) throws IOException {
 		// Gui.consolegui();
 		FileControl.createtempDir();
@@ -147,17 +193,15 @@ public class main {
 							doLoop = false;
 						}
 					}
-					// Website
+					// Force Update
 					if (x >= .49 - .3 && x <= .49 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
-							System.out.println("Website Button Clicked");
-							System.out.println("Opening The PAQ Fourms"); ///change to your Website name
+							FileControl.delete(GetPAQPath());
+							FileControl.delete(new File(GetMcFilepath()+"/v.txt"));
 							try {
-								java.awt.Desktop
-										.getDesktop()
-										.browse(java.net.URI
-												.create("http://paq.mage-tech.org")); ///change url to your website location 
-							} catch (IOException e) {
+								Install.main();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							doLoop = false;

@@ -28,7 +28,7 @@ public class Gui {
 
 		StdDraw.picture(0.5, 0.7, "PAQLogo.png");
 		StdDraw.picture(0.18, 0.25, "Install1.png", .3, .2);
-		StdDraw.picture(0.49, 0.25, "website1.png", .3, .2);
+		StdDraw.picture(0.49, 0.25, "ForceUpdate1.png", .3, .2);
 		StdDraw.picture(0.8, 0.25, "exit1.png", .3, .2);
 		StdDraw.picture(0.5, 0.00, "copywrite1.png");
 	}
