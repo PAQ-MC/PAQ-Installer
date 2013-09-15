@@ -20,7 +20,7 @@ public class Install {
 		// PAQ V check Code
 File srcFolder = null, destFolder = null;
 		if (main.GetMcFilepath()== null){
-			JOptionPane.showMessageDialog(null, "Your OS is currently not supported Exiting Installer and Opening fourms");
+			main.print("Your OS is currently not supported Exiting Installer and Opening fourms", true);
 			java.awt.Desktop.getDesktop().browse(java.net.URI.create("http://paq.mage-tech.org"));
 			main.exit();
 		}else{
@@ -32,15 +32,12 @@ File srcFolder = null, destFolder = null;
 
 		if (!destFolder.exists()) {
 			if (!srcFolder.exists()) {
-				System.out.println(".minecraft Does not exist");
-				JOptionPane
-						.showMessageDialog(null,
-								".minecraft does not exits please run minecraft atleast once");
+				main.print(".minecraft does not exits please run minecraft atleast once", true);
 				main.exit();
 			} else {
-				System.out.println("copying .minecraft this could take a bit");
+				main.print("copying .minecraft this could take a bit", false);
 				FileControl.copyFolder(srcFolder, destFolder);
-				System.out.println("finshed coping .minecraft");
+				main.print("finshed coping .minecraft",false);
 			}
 
 		}
@@ -48,7 +45,7 @@ File srcFolder = null, destFolder = null;
 		System.out.println("checking if v.txt exits");
 		File v = new File(srcFolder + "/v.txt");
 		if (v.exists()) {
-			System.out.println("v.txt does exits comparing to web PAQ v"); ///change PAQ to mod pack name
+			main.print("v.txt does exits comparing to web PAQ v",false); ///change PAQ to mod pack name
 			BufferedReader in = new BufferedReader(new FileReader(v));
 
 			while (in.ready()) {
@@ -56,14 +53,11 @@ File srcFolder = null, destFolder = null;
 			}
 			in.close();
 			if (PAQv.equals(main.Update())) {
-				System.out.println("web PAQ v and v.txt mach");  /// Change PAQ to Mod pack name
-				JOptionPane
-						.showMessageDialog(null,
-								"you are running the most upto date PAQ v. installer will now exit");  ///change PAQ to mod pack name
+				main.print("web PAQ v and v.txt mach",false);  /// Change PAQ to Mod pack name
+				main.print("you are running the most upto date PAQ v. installer will now exit",true);  ///change PAQ to mod pack name
 				main.exit();
 			} else {
-				System.out
-						.println("web PAQ v and v.txt do not mach updating v.txt"); /// Change PAQ to Mod pack name
+				main.print("web PAQ v and v.txt do not mach updating v.txt",false); /// Change PAQ to Mod pack name
 				File file = new File(srcFolder + "/v.txt");
 				file.delete();
 				file.createNewFile();
@@ -73,7 +67,7 @@ File srcFolder = null, destFolder = null;
 				bw.close();
 			}
 		} else {
-			System.out.println("v.txt does not exist makeing");
+			main.print("v.txt does not exist makeing",false);
 			File file = new File(srcFolder + "//v.txt");
 
 			// if file doesnt exists, then create it
@@ -86,11 +80,11 @@ File srcFolder = null, destFolder = null;
 			bw.write(main.Update());
 			bw.close();
 		}
-		System.out.println("Downloading config");
+		main.print("Downloading config",false);
 		// Change this txt to change Config download location
 		main.downloadtxt("http://mage-tech.org/PAQ/config.txt", 
 				"PAQ-Temp/config.txt"); /// Change to Config web location 
-		System.out.println("config downloaded ... reading config");
+		main.print("config downloaded ... reading config",false);
 		BufferedReader br = new BufferedReader(new FileReader(
 				"PAQ-Temp/config.txt")); /// Change To config Downloaded location
 		String location, adfy, unzip, savelocation, unziplocation, filename;
@@ -101,37 +95,29 @@ File srcFolder = null, destFolder = null;
 			savelocation = br.readLine();
 			unziplocation = br.readLine();
 			filename = br.readLine();
-			System.out.println("checking if " + filename
-					+ " requres adfly download");
+			main.print("checking if " + filename
+					+ " requres adfly download",false);
 			if (adfy.equals("true")) {
 				System.out.println("it does");
 				boolean exists = false;
 				do {
-					System.out.println("showing modauthor msg");
-					JOptionPane
-							.showMessageDialog(
-									null,
-									"due to the modauthor not giving us permision to add there mod to the mod pack main download you will need to download thu there site");
-					System.out.println("opening users defult browser");
+					main.print("showing modauthor msg",false);
+					main.print("due to the modauthor not giving us permision to add there mod to the mod pack main download you will need to download thu there site",false);
+					main.print("opening users defult browser",false);
 					java.awt.Desktop.getDesktop().browse(
 							java.net.URI.create(location));
-					System.out.println("showing wait msg");
-					JOptionPane
-							.showMessageDialog(
-									null,
-									" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location"); /// Change to <Modpack Name>-temp/Downloads
-					System.out.println("Checking if " + filename + " exits");
+					main.print("showing wait msg",false);
+					main.print(" please close this when the file is downloaded to the PAQ-Temp/Downloads folder at your current location",true); /// Change to <Modpack Name>-temp/Downloads
+					main.print("Checking if " + filename + " exits",true);
 					File downloadeditem = new File("PAQ-temp/Downloads/"
 							+ filename); ///chang PAQ-Temp/Downloads to <Modpack name>-Temp/Downloads
 					if (downloadeditem.exists() != true) {
-						System.out
-								.println("File missing asking if link is broken");
+						main.print("File missing asking if link is broken",false);
 						int reply = JOptionPane.showConfirmDialog(null,
 								"is the link broken?", null,
 								JOptionPane.YES_NO_OPTION);
 						if (reply == JOptionPane.YES_OPTION) {
-							System.out
-									.println("link Broken sending user to broken link reporting forum");
+							main.print("link Broken sending user to broken link reporting forum",false);
 							java.awt.Desktop
 									.getDesktop()
 									.browse(java.net.URI
@@ -143,33 +129,32 @@ File srcFolder = null, destFolder = null;
 					} else {
 						exists = true;
 					}
-					System.out.println("does file exist?");
+					main.print("does file exist?",false);
 				} while (exists != true);
-				System.out.println("File does exist");
-				System.out.println("Checking if needs upziping");
+				main.print("File does exist",false);
+				main.print("Checking if needs upziping",false);
 				if (unzip.equals("true")) {
-					System.out.println("does need unziping");
+					main.print("does need unziping",false);
 					main.unzip("/PAQ-Temp/Donwloads/" + filename, unziplocation);  ///change PAQ-Temp/Downloads to <modpack name>-Temp/Downloads
-					System.out.println("file unziped");
+					main.print("file unziped",false);
 				} else {
-					System.out
-							.println("file does not need unziping copying to requred location");
+					main.print("file does not need unziping copying to requred location",false);
 					File copylocation = new File("/PAQ-Temp/Downloads/"
 							+ filename);
 					copylocation.renameTo(new File(savelocation));
-					System.out.println("File copyed");
+					main.print("File copyed",false);
 				}
 			} else {
-				System.out.println("not adfly downloading " + filename);
+				main.print("not adfly downloading " + filename,false);
 				main.download(location, savelocation);
-				System.out.println("File downloaded");
-				System.out.println("Checking if needs unziping");
+				main.print("File downloaded",false);
+				main.print("Checking if needs unziping",false);
 				if (unzip.equals("true")) {
-					System.out.println("file does need unziping");
+					main.print("file does need unziping",false);
 					main.unzip(savelocation, unziplocation);
-					System.out.println("File unziped");
+					main.print("File unziped",false);
 				}
-				System.out.println("dose not need unziping");
+				main.print("dose not need unziping",false);
 
 			}
 
@@ -177,7 +162,7 @@ File srcFolder = null, destFolder = null;
 		br.close();
 
 		// download forge
-		System.out.println("getting forge config info");
+		main.print("getting forge config info",false);
 		BufferedReader reader = main
 				.read("http://mage-tech.org/PAQ/forgeinfo.txt");
 
@@ -186,22 +171,18 @@ File srcFolder = null, destFolder = null;
 		String lastVersionId = reader.readLine();
 
 		reader.close();
-		System.out.println("downloading config");
+		main.print("downloading config",false);
 		main.download(url, "PAQ-Temp/" + name);
-		System.out.println("Fished downloading forge");
+		main.print("Fished downloading forge",false);
 
 		// install forge
-		System.out.println("launching forge installer");
-		JOptionPane
-				.showMessageDialog(
-						null,
-						"the installer will now launch the forge installer please install forge and do not close the installer");
+		main.print("launching forge installer",false);
+		main.print("the installer will now launch the forge installer please install forge and do not close the installer",true);
 
 		Process p = Runtime.getRuntime().exec(("java -jar PAQ-Temp/" + name));
 		p.waitFor();
 		if (p.exitValue() != 0) {
-			JOptionPane.showMessageDialog(null,
-					"forge install failed PAQ installer will now exit");
+			main.print("forge install failed PAQ installer will now exit",true);
 			main.exit();
 		}
 
@@ -211,22 +192,21 @@ File srcFolder = null, destFolder = null;
 		// move mods folder form PAQ-Temp to %appdata%/.PAQ
 		File modsfolder = new File(destFolder + "/mods");
 		if (modsfolder.exists()) {
-			System.out.println("deleteing old mod folder");
+			main.print("deleteing old mod folder",false);
 			FileControl.delete(modsfolder);
-			System.out.println("old mods folder deleted");
+			main.print("old mods folder deleted",false);
 		}
 		FileControl.copyFolder(new File("PAQ-Temp/mods"), modsfolder);
 		// move config folder form PAQ-Temp to %appdata%/.PAQ
 		File configfolder = new File(destFolder + "/config");
 		if (configfolder.exists()) {
-			System.out.println("deleteing old config folder");
+			main.print("deleteing old config folder",false);
 			FileControl.delete(configfolder);
-			System.out.println("old config Folder deleted");
+			main.print("old config Folder deleted",false);
 		}
 		FileControl.copyFolder(new File("PAQ-Temp/config"), configfolder);
-		System.out.println("what are we going to do today?");
-		JOptionPane.showMessageDialog(null, "install done have fun playing");
-		System.out
-				.println("we are going to take over the world block by block");
+		main.print("what are we going to do today?",false);
+		main.print("install done have fun playing",true);
+		main.print("we are going to take over the world block by block",false);
 	}
 }

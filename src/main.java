@@ -4,12 +4,15 @@ Attribution-NonCommercial 3.0 Unported License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.io.*;
+
+import javax.swing.JOptionPane;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -38,50 +41,32 @@ public class main {
 	}
 
 	// Get v. Statuses
-	public static String Update() {
+	public static String Update() throws Exception {
 		// Update code goes here
 		String PAQV = null;
-		try {
-			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt"); // /change to
-																// your v.txt
-																// location on
-																// the web
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+			PAQV = webget("http://mage-tech.org/PAQ/PAQv.txt"); 
 		return PAQV;
 	}
 
 	// exit code
-	public static void exit() {
+	public static void exit() throws IOException {
 		// work on code to clean up PAQ-Temp folder
-		try {
-			FileControl.deletetempDir();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
+		FileControl.deletetempDir();
 		System.exit(0);
 	}
 
 	// Unzip Code
-	public static void unzip(String Zipfile, String Directry) {
-
-		try {
-
+	public static void unzip(String Zipfile, String Directry) throws ZipException {
 			ZipFile zipFile = new ZipFile(Zipfile);
 			zipFile.extractAll(Directry);
-		} catch (ZipException e) {
-			e.printStackTrace();
-		}
 	}
 
 	// Download code
-	public static void download(String Url, String Downloadlocation) {
-		System.out.println("Downloading file from " + Url + " to "
-				+ Downloadlocation);
-		try {
+	public static void download(String Url, String Downloadlocation) throws IOException {
+		print("Checking if link is valid", false);
+		if (exists(Url)) {
+			main.print("Downloading file from " + Url + " to "
+				+ Downloadlocation, false);
 			URL website;
 			website = new URL(Url);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
@@ -90,18 +75,24 @@ public class main {
 			fos = new FileOutputStream(outputfile);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 			fos.close();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} else {
+			print("FileServer appears down please try again later", true);
+			exit();
 		}
+		
 	}
 
+	//Check if File Exists on Webserver
+	public static boolean exists(String URLName) throws MalformedURLException, IOException{
+	      HttpURLConnection.setFollowRedirects(false);
+	      HttpURLConnection con =
+	         (HttpURLConnection) new URL(URLName).openConnection();
+	      con.setRequestMethod("HEAD");
+	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	  }
+	
 	// Download txt
-	public static void downloadtxt(String Url, String Downloadlocation) {
-		try {
+	public static void downloadtxt(String Url, String Downloadlocation) throws IOException {
 			URL url = new URL(Url);
 			URLConnection conn = url.openConnection();
 			InputStream in = conn.getInputStream();
@@ -115,10 +106,6 @@ public class main {
 			out.flush();
 			out.close();
 			in.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static File GetMcFilepath() {
@@ -164,9 +151,17 @@ public class main {
 		}
 		}
 	
+	// Text Printing Method
+	public static void print(String Text, boolean alert) {
+		System.out.println(Text);
+		if (alert == true){
+			JOptionPane.showMessageDialog(null, Text);
+		}
+	}
+		
 	// start code
 	public static void main(String[] args) throws IOException {
-		// Gui.consolegui();
+		Gui.consolegui();
 		FileControl.createtempDir();
 		Gui.main();
 		boolean programloop = true;
@@ -196,13 +191,16 @@ public class main {
 					// Force Update
 					if (x >= .49 - .3 && x <= .49 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
-							FileControl.delete(GetPAQPath());
+							int i = JOptionPane.showConfirmDialog(null, "Are You Sure you want to force Update This will remove all files from PAQ mod pack Includeing Worlds", "Force Update Check", JOptionPane.YES_NO_OPTION);
+							if (i == 0){
+								FileControl.delete(GetPAQPath());
 							FileControl.delete(new File(GetMcFilepath()+"/v.txt"));
 							try {
 								Install.main();
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
+							}
+							
 							}
 							doLoop = false;
 						}
@@ -210,8 +208,8 @@ public class main {
 					// Exit
 					if (x >= .8 - .3 && x <= .8 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
-							System.out.println("Exit Button Clicked");
-							System.out.println("Exiting");
+							main.print("Exit Button Clicked",false);
+							main.print("Exiting",false);
 							exit();
 							doLoop = false;
 						}

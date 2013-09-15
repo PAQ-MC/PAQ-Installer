@@ -33,7 +33,7 @@ public class JsonEditCode {
         File launcherProfiles = new File(jsonlocation + "/launcher_profiles.json");
         if (!launcherProfiles.exists())
         {
-            JOptionPane.showMessageDialog(null, "There is no minecraft launcher profile at this location, you need to run the launcher first!", "Error", JOptionPane.ERROR_MESSAGE);
+        	main.print("There is no minecraft launcher profile at this location, you need to run the launcher first!", true);
         }
   
         JdomParser parser = new JdomParser();
@@ -43,7 +43,7 @@ public class JsonEditCode {
         //PAQ Profile setup location
         
         JsonField[] fields = new JsonField[] {
-            JsonNodeFactories.field("name", JsonNodeFactories.string("PAQ" + " " + PAQv)),
+            JsonNodeFactories.field("name", JsonNodeFactories.string("PAQ")),
             JsonNodeFactories.field("gameDir", JsonNodeFactories.string(gameDir)),            
             JsonNodeFactories.field("lastVersionId", JsonNodeFactories.string(forgeid)),
             JsonNodeFactories.field("javaArgs", JsonNodeFactories.string("-Xmx1G -XX:MaxPermSize\u003d1024m")),
@@ -54,7 +54,7 @@ public class JsonEditCode {
 
         HashMap<JsonStringNode, JsonNode> profileCopy = Maps.newHashMap(jsonProfileData.getNode("profiles").getFields());
         HashMap<JsonStringNode, JsonNode> rootCopy = Maps.newHashMap(jsonProfileData.getFields());
-        profileCopy.put(JsonNodeFactories.string("PAQ" + " " + PAQv), JsonNodeFactories.object(fields)); //add PAQ + v. number to the Text Text field at this location
+        profileCopy.put(JsonNodeFactories.string("PAQ"), JsonNodeFactories.object(fields)); //add PAQ + v. number to the Text Text field at this location
         JsonRootNode profileJsonCopy = JsonNodeFactories.object(profileCopy);
 
         rootCopy.put(JsonNodeFactories.string("profiles"), profileJsonCopy);

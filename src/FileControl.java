@@ -23,7 +23,7 @@ public class FileControl {
 			if (!theDir.exists()) {
 				boolean result = theDir.mkdirs();
 				if (result) {
-					System.out.println("PAQ-Temp/mods Folder Created");
+					main.print("PAQ-Temp/mods Folder Created", false);
 				}
 			}
 
@@ -32,7 +32,7 @@ public class FileControl {
 				boolean result = theDir2.mkdirs();
 
 				if (result) {
-					System.out.println("PAQ-Temp/config Folder Created");
+					main.print("PAQ-Temp/config Folder Created", false);
 				}
 			}
 
@@ -41,7 +41,7 @@ public class FileControl {
 				boolean result = theDir3.mkdirs();
 
 				if (result) {
-					System.out.println("PAQ-Temp/Downloads Folder Created");
+					main.print("PAQ-Temp/Downloads Folder Created", false);
 				}
 			}
 		}
@@ -54,8 +54,8 @@ public class FileControl {
 				if (file.list().length == 0) {
 
 					file.delete();
-					System.out.println("Directory is deleted : "
-							+ file.getAbsolutePath());
+					main.print("Directory is deleted : "
+							+ file.getAbsolutePath(), false);
 
 				} else {
 
@@ -73,15 +73,15 @@ public class FileControl {
 					// check the directory again, if empty then delete it
 					if (file.list().length == 0) {
 						file.delete();
-						System.out.println("Directory is deleted : "
-								+ file.getAbsolutePath());
+						main.print("Directory is deleted : "
+								+ file.getAbsolutePath(), false);
 					}
 				}
 
 			} else {
 				// if file, then delete it
 				file.delete();
-				System.out.println("File is deleted : " + file.getAbsolutePath());
+				main.print("File is deleted : " + file.getAbsolutePath(), false);
 			}
 		}
 
@@ -99,8 +99,8 @@ public class FileControl {
 				// if directory not exists, create it
 				if (!dest.exists()) {
 					dest.mkdir();
-					System.out.println("Directory copied from " + src + "  to "
-							+ dest);
+					main.print("Directory copied from " + src + "  to "
+							+ dest , false);
 				}
 
 				// list all the directory contents
@@ -130,7 +130,7 @@ public class FileControl {
 
 				in.close();
 				out.close();
-				System.out.println("File copied from " + src + " to " + dest);
+				main.print("File copied from " + src + " to " + dest, false);
 			}
 		}
 

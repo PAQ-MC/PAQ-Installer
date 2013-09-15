@@ -4,6 +4,7 @@ Attribution-NonCommercial 3.0 Unported License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
  */
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -14,10 +15,11 @@ import java.io.PrintStream;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 public class Gui {
-	static JTextArea textArea;
+	static JTextPane textArea;
 	
 	public static void main() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -35,27 +37,36 @@ public class Gui {
 
 	// console gui
 	public static void consolegui() {
-		redirectSystemStreams();
-		JFrame frame = new JFrame("JTextArea Test");
+		//redirectSystemStreams();
+		JFrame frame = new JFrame("Console");
 		frame.setLayout(new FlowLayout());
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		textArea = new JTextArea("redirecting console output ... ", 10, 50);
-		textArea.setPreferredSize(new Dimension(6, 3));
-		JScrollPane scrollPane = new JScrollPane(textArea,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		textArea.setLineWrap(true);
-		frame.add(scrollPane);
+		textArea = new JTextPane();
+		textArea.setPreferredSize(new Dimension(600, 300));
+		//JScrollPane scrollPane = new JScrollPane(textArea,
+		//		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		//		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		textArea.setAutoscrolls(true);
+		
+		frame.add(new JScrollPane(textArea));
+		MessageConsole mc = new MessageConsole(textArea);
+		mc.redirectOut(null, System.out);
+		mc.redirectErr(Color.RED, null);
+		
+		//frame.add(scrollPane);
 		frame.pack();
 		frame.setVisible(true);
-		System.out.println("console output redirected");
+		main.print("console output redirected", false);
 	}
 
 	// update console gui
 	private static void updateTextArea(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				textArea.append(text);
+				
+				//textArea.(text);
+				
+			
 			}
 		});
 	}
