@@ -16,11 +16,17 @@ import javax.swing.JOptionPane;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class main {
 
 	static String PAQv;
-
+	static PrintWriter out;
+	
+	
 	// web page read
 	public static BufferedReader read(String url) throws Exception {
 
@@ -51,6 +57,7 @@ public class main {
 	// exit code
 	public static void exit() throws IOException {
 		// work on code to clean up PAQ-Temp folder
+		out.close();
 		FileControl.deletetempDir();
 		System.exit(0);
 	}
@@ -152,15 +159,20 @@ public class main {
 		}
 	
 	// Text Printing Method
-	public static void print(String Text, boolean alert) {
+	public static void print(String Text, boolean alert){
 		System.out.println(Text);
 		if (alert == true){
 			JOptionPane.showMessageDialog(null, Text);
 		}
+			out.println(Text);
+			out.flush();
 	}
 		
 	// start code
 	public static void main(String[] args) throws IOException {
+		DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+		Date date = new Date();
+		out = new PrintWriter(new FileWriter("PAQlog " + dateFormat.format(date) + ".txt"),true);
 		Gui.consolegui();
 		FileControl.createtempDir();
 		Gui.main();
@@ -176,7 +188,7 @@ public class main {
 					x = StdDraw.mouseX();
 					y = StdDraw.mouseY();
 					// Install
-					if (x >= .18 - .3 && x <= .18 + .3) {
+					if (x >= .3 - .3 && x <= .3 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
 							System.out.println("Install Button Clicked");
 							System.out.println("Begining Install");
@@ -184,29 +196,28 @@ public class main {
 								Install.main();
 							} catch (Exception e) {
 								e.printStackTrace();
+								print("a error has hapend sorry about this but please report this to the fourms and be sure to inclued the PAQlog.txt file", true);
+								exit();
 							}
 							doLoop = false;
 						}
 					}
 					// Force Update
-					if (x >= .49 - .3 && x <= .49 + .3) {
-						if (y >= .25 - .2 && y <= .25 + .2) {
-							int i = JOptionPane.showConfirmDialog(null, "Are You Sure you want to force Update This will remove all files from PAQ mod pack Includeing Worlds", "Force Update Check", JOptionPane.YES_NO_OPTION);
-							if (i == 0){
-								FileControl.delete(GetPAQPath());
-							FileControl.delete(new File(GetMcFilepath()+"/v.txt"));
-							try {
-								Install.main();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+					//if (x >= .49 - .3 && x <= .49 + .3) {
+						//if (y >= .25 - .2 && y <= .25 + .2) {
 							
-							}
-							doLoop = false;
-						}
-					}
+							//try {
+								//Install.main();
+							//} catch (Exception e) {
+								//e.printStackTrace();
+							//}
+							
+							//}
+							//doLoop = false;
+						//}
+					//}
 					// Exit
-					if (x >= .8 - .3 && x <= .8 + .3) {
+					if (x >= .7 - .3 && x <= .7 + .3) {
 						if (y >= .25 - .2 && y <= .25 + .2) {
 							main.print("Exit Button Clicked",false);
 							main.print("Exiting",false);

@@ -28,20 +28,6 @@ File srcFolder = null, destFolder = null;
 		destFolder	 = main.GetPAQPath();
 		}
 		
-		
-
-		if (!destFolder.exists()) {
-			if (!srcFolder.exists()) {
-				main.print(".minecraft does not exits please run minecraft atleast once", true);
-				main.exit();
-			} else {
-				main.print("copying .minecraft this could take a bit", false);
-				FileControl.copyFolder(srcFolder, destFolder);
-				main.print("finshed coping .minecraft",false);
-			}
-
-		}
-
 		System.out.println("checking if v.txt exits");
 		File v = new File(srcFolder + "/v.txt");
 		if (v.exists()) {
@@ -54,8 +40,14 @@ File srcFolder = null, destFolder = null;
 			in.close();
 			if (PAQv.equals(main.Update())) {
 				main.print("web PAQ v and v.txt mach",false);  /// Change PAQ to Mod pack name
-				main.print("you are running the most upto date PAQ v. installer will now exit",true);  ///change PAQ to mod pack name
-				main.exit();
+				int i = JOptionPane.showConfirmDialog(null, "You are Runing the most upto date mods do you still wish to update?", "Update Anyway Check", JOptionPane.YES_NO_OPTION);
+				if (i == 0){
+					FileControl.delete(destFolder);
+					FileControl.delete(new File(srcFolder +"/v.txt"));
+				}else{
+					main.print("exiting installer", true);
+					main.exit();
+				}
 			} else {
 				main.print("web PAQ v and v.txt do not mach updating v.txt",false); /// Change PAQ to Mod pack name
 				File file = new File(srcFolder + "/v.txt");
@@ -80,6 +72,19 @@ File srcFolder = null, destFolder = null;
 			bw.write(main.Update());
 			bw.close();
 		}
+		
+		if (!destFolder.exists()) {
+			if (!srcFolder.exists()) {
+				main.print(".minecraft does not exits please run minecraft atleast once", true);
+				main.exit();
+			} else {
+				main.print("copying .minecraft this could take a bit", false);
+				FileControl.copyFolder(srcFolder, destFolder);
+				main.print("finshed coping .minecraft",false);
+			}
+
+		}
+		
 		main.print("Downloading config",false);
 		// Change this txt to change Config download location
 		main.downloadtxt("http://mage-tech.org/PAQ/config.txt", 

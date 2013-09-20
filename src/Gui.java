@@ -29,9 +29,9 @@ public class Gui {
 				/ 2, dim.height / 2 - StdDraw.frame.getSize().height / 2 - 130);
 
 		StdDraw.picture(0.5, 0.7, "PAQLogo.png");
-		StdDraw.picture(0.18, 0.25, "Install1.png", .3, .2);
-		StdDraw.picture(0.49, 0.25, "ForceUpdate1.png", .3, .2);
-		StdDraw.picture(0.8, 0.25, "exit1.png", .3, .2);
+		StdDraw.picture(0.3, 0.25, "Install1.png", .3, .2);
+		//StdDraw.picture(0.49, 0.25, "ForceUpdate1.png", .3, .2);
+		StdDraw.picture(0.7, 0.25, "exit1.png", .3, .2);
 		StdDraw.picture(0.5, 0.00, "copywrite1.png");
 	}
 
@@ -51,7 +51,7 @@ public class Gui {
 		frame.add(new JScrollPane(textArea));
 		MessageConsole mc = new MessageConsole(textArea);
 		mc.redirectOut(null, System.out);
-		mc.redirectErr(Color.RED, null);
+		mc.redirectErr(Color.RED, System.out);
 		
 		//frame.add(scrollPane);
 		frame.pack();
