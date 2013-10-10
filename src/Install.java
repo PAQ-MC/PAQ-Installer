@@ -87,12 +87,12 @@ File srcFolder = null, destFolder = null;
 		
 		main.print("Downloading config",false);
 		// Change this txt to change Config download location
-		main.downloadtxt("http://mage-tech.org/PAQ/config.txt", 
+		Download.downloadtxt("http://mage-tech.org/PAQ/config.txt", 
 				"PAQ-Temp/config.txt"); /// Change to Config web location 
 		main.print("config downloaded ... reading config",false);
 		BufferedReader br = new BufferedReader(new FileReader(
 				"PAQ-Temp/config.txt")); /// Change To config Downloaded location
-		String location, adfy, unzip, savelocation, unziplocation, filename;
+		String location, adfy, unzip, savelocation, unziplocation, filename, ServerOnly;
 
 		while ((location = br.readLine()) != null) {
 			adfy = br.readLine();
@@ -100,6 +100,7 @@ File srcFolder = null, destFolder = null;
 			savelocation = br.readLine();
 			unziplocation = br.readLine();
 			filename = br.readLine();
+			ServerOnly = br.readLine();
 			main.print("checking if " + filename
 					+ " requres adfly download",false);
 			if (adfy.equals("true")) {
@@ -151,7 +152,7 @@ File srcFolder = null, destFolder = null;
 				}
 			} else {
 				main.print("not adfly downloading " + filename,false);
-				main.download(location, savelocation);
+				Download.download(location, savelocation);
 				main.print("File downloaded",false);
 				main.print("Checking if needs unziping",false);
 				if (unzip.equals("true")) {
@@ -177,8 +178,8 @@ File srcFolder = null, destFolder = null;
 
 		reader.close();
 		main.print("downloading config",false);
-		main.download(url, "PAQ-Temp/" + name);
-		main.print("Fished downloading forge",false);
+		Download.download(url, "PAQ-Temp/" + name);
+		main.print("finshed downloading forge",false);
 
 		// install forge
 		main.print("launching forge installer",false);

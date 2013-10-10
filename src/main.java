@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -118,10 +119,11 @@ public class main {
 	public static File GetMcFilepath() {
 
 		String os = System.getProperty("os.name").toLowerCase();
-		boolean isWindows, isMac;
+		boolean isWindows, isMac, isLinux;
 
 		isWindows = (os.indexOf("win") >= 0);
 		isMac = (os.indexOf("mac") >= 0);
+		isLinux = (os.indexOf("nux") >=0);
 
 		if (isWindows) {
 			File mclocation = new File(System.getenv("APPDATA")
@@ -131,6 +133,10 @@ public class main {
 			File mclocatoin = new File(System.getProperty("user.home")
 					+ "/Library/Application Support/minecraft");
 			return mclocatoin;
+		} else if (isLinux) {
+				File mclocatoin = new File(System.getProperty("user.home")
+						+ "/.minecraft");
+				return mclocatoin;
 		} else {
 			return null;
 		}
@@ -140,10 +146,11 @@ public class main {
 	public static File GetPAQPath() {
 
 		String os = System.getProperty("os.name").toLowerCase();
-		boolean isWindows, isMac;
+		boolean isWindows, isMac, isLinux;
 
 		isWindows = (os.indexOf("win") >= 0);
 		isMac = (os.indexOf("mac") >= 0);
+		isLinux = (os.indexOf("nux") >=0);
 
 		if (isWindows) {
 			File PAQlocation = new File(System.getenv("APPDATA")
@@ -152,6 +159,10 @@ public class main {
 		} else if (isMac) {
 			File mclocatoin = new File(System.getProperty("user.home")
 					+ "/Library/Application Support/PAQ");
+			return mclocatoin;
+		} else if (isLinux) {
+			File mclocatoin = new File(System.getProperty("user.home")
+					+ "/.PAQ");
 			return mclocatoin;
 		} else {
 			return null;
@@ -167,12 +178,28 @@ public class main {
 			out.println(Text);
 			out.flush();
 	}
-		
+	
+	public static void InstallerUpdateCheck() throws Exception{
+		String installerV;
+		installerV = webget("http://mage-tech.org/PAQ/PAQInstallerV.txt");
+		if (installerV.equals("2.0A") != true) { //must change v. number with updates
+			print("There Is a Update to the intaller please use That one",true);
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create("http://pack.mage-tech.org"));
+			exit();
+		}
+	}
+	
 	// start code
 	public static void main(String[] args) throws IOException {
 		DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 		Date date = new Date();
 		out = new PrintWriter(new FileWriter("PAQlog " + dateFormat.format(date) + ".txt"),true);
+		try {
+			InstallerUpdateCheck();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Gui.consolegui();
 		FileControl.createtempDir();
 		Gui.main();
@@ -196,7 +223,9 @@ public class main {
 								Install.main();
 							} catch (Exception e) {
 								e.printStackTrace();
-								print("a error has hapend sorry about this but please report this to the fourms and be sure to inclued the PAQlog.txt file", true);
+								out.println(e.toString());
+								out.flush();
+								print("a error has hapend sorry about this, but please report this to the fourms and be sure to inclued the PAQlog.txt file", true);
 								exit();
 							}
 							doLoop = false;
