@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 
 public class Install {
 	static String PAQv;
-
 	public static void main() throws Exception {
 
 		// PAQ V check Code
@@ -78,9 +77,9 @@ File srcFolder = null, destFolder = null;
 				main.print(".minecraft does not exits please run minecraft atleast once", true);
 				main.exit();
 			} else {
-				main.print("copying .minecraft this could take a bit", false);
-				FileControl.copyFolder(srcFolder, destFolder);
-				main.print("finshed coping .minecraft",false);
+				main.print("Creating .paq folder won't take long at all", false);
+				destFolder.mkdirs();
+				main.print("finshed makeing .paq folder",false);
 			}
 
 		}
@@ -164,6 +163,7 @@ File srcFolder = null, destFolder = null;
 
 			}
 
+			
 		}
 		br.close();
 
@@ -211,6 +211,8 @@ File srcFolder = null, destFolder = null;
 			main.print("old config Folder deleted",false);
 		}
 		FileControl.copyFolder(new File("PAQ-Temp/config"), configfolder);
+
+       
 		main.print("what are we going to do today?",false);
 		main.print("install done have fun playing",true);
 		main.print("we are going to take over the world block by block",false);
